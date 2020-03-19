@@ -1,0 +1,204 @@
+---
+title:    Domain Name System Uniform Resource Identifiers for DNS over HTTPS and DNS over TLS
+
+abbrev: DNS URI for DoH and Dot
+docname: draft-mglt-dprive-dns-uri-00
+
+
+area: ART
+wg: dprive
+kw: Internet-Draft
+cat: info
+
+pi:
+  rfcedstyle: yes
+  toc: yes
+  tocindent: yes
+  sortrefs: yes
+  symrefs: yes
+  strict: yes
+  comments: yes
+  inline: yes
+  docmapping: yes
+
+author:
+      -
+        ins: D. Migault
+        name: Daniel Migault
+        org: Ericsson
+        street: 8275 Trans Canada Route
+        city: Saint Laurent, QC
+        code: 4S 0B6
+        country: Canada
+        email: daniel.migault@ericsson.com
+
+--- abstract
+
+Today DNS resources may also be accessed using multiple transport which includes DNS over UDP/TCP port 53 {{!RFC1034}},{{!RFC1035}}. 
+DNS over TLS {{!RFC7858}} or DNS over HTTPS {{!RFC8484}}. This document describes URIs that describes the DNS resource as well as indicate the transport to access the resource.
+
+--- middle
+
+
+# Requirements Notation
+
+{::boilerplate bcp14}
+
+# Introduction {#sec-intro}
+
+{{!RFC4501}} defines an URI {{!RFC7553}} for DNS resources accessed but does not specify the transport used to access the DNS resource. 
+
+Today DNS resources may also be accessed using multiple transport layers which includes DNS over UDP/TCP port 53 {{!RFC1034}},{{!RFC1035}}. 
+DNS over TLS {{!RFC7858}} or DNS over HTTPS {{!RFC8484}}. This document describes URIs that describes the DNS resource as well as indicate the transport to access the resource.
+
+# DNS over UDP/TCP 53
+
+This section describes the URI template for the registration of the URI as described in {{!RFC7595}} to describe DNS resources being accessed using DNS over TLS. 
+
+~~~
+URL scheme name: "dns53".
+
+URL scheme syntax: A DNS URI designates a DNS resource record set,
+referenced by domain name, class, type, and, optionally, the
+authority.  The DNS URI follows the generic syntax from {{!RFC3986}}
+and is described using ABNF {{!RFC5234}}.  Strings are not case 
+sensitive, and free insertion of linear-white-space is not permitted.
+
+dnsurl          = "dns53:" [ "//" dnsauthority "/" ]
+                  dnsname ["?" dnsquery]
+
+dnsauthority    = host [ ":" port ]
+                             ; See RFC 3986 for the
+                             ; definition of "host" and "port".
+
+dnsname         = *pchar
+                             ; See RFC 3986 for the
+                             ; definition of "pchar".
+
+                             ; The "dnsname" field may be a
+                             ; "relative" or "absolute" name,
+                             ; as per RFC 1034, section 3.1.
+
+                             ; Note further that an empty
+                             ; "dnsname" value is to be
+                             ; interpreted as the root itself.
+                             ; See below on relative dnsnames.
+
+dnsquery        = dnsqueryelement [";" dnsquery]
+
+dnsqueryelement = ( "CLASS=" dnsclassval ) / ( "TYPE=" dnstypeval )
+                             ; Each clause MUST NOT be used more
+                             ; than once.
+
+dnsclassval     = 1*digit / "IN" / "CH" /
+                  <Any IANA registered DNS class mnemonic>
+
+dnstypeval      = 1*digit / "A" / "NS" / "MD" /
+                  <Any IANA registered DNS type mnemonic>
+~~~
+
+The DNS resource follows {{!RFC4501}} but indicates the DNS resource MUST be accessed using UDP or TCP as described in {{!RFC1034}} or {{!RFC1035}}.
+
+# DNS over TLS URI Registration
+
+This section describes the URI template for the registration of the URI as described in {{!RFC7595}} to describe DNS resources being accessed using DNS over TLS. 
+
+~~~
+URL scheme name: "dot".
+
+URL scheme syntax: A DNS URI designates a DNS resource record set,
+referenced by domain name, class, type, and, optionally, the
+authority.  The DNS URI follows the generic syntax from {{!RFC3986}}
+and is described using ABNF {{!RFC5234}}.  Strings are not case 
+sensitive, and free insertion of linear-white-space is not permitted.
+
+dnsurl          = "dot:" [ "//" dnsauthority "/" ]
+                  dnsname ["?" dnsquery]
+
+dnsauthority    = host [ ":" port ]
+                             ; See RFC 3986 for the
+                             ; definition of "host" and "port".
+
+dnsname         = *pchar
+                             ; See RFC 3986 for the
+                             ; definition of "pchar".
+
+                             ; The "dnsname" field may be a
+                             ; "relative" or "absolute" name,
+                             ; as per RFC 1034, section 3.1.
+
+                             ; Note further that an empty
+                             ; "dnsname" value is to be
+                             ; interpreted as the root itself.
+                             ; See below on relative dnsnames.
+
+dnsquery        = dnsqueryelement [";" dnsquery]
+
+dnsqueryelement = ( "CLASS=" dnsclassval ) / ( "TYPE=" dnstypeval )
+                             ; Each clause MUST NOT be used more
+                             ; than once.
+
+dnsclassval     = 1*digit / "IN" / "CH" /
+                  <Any IANA registered DNS class mnemonic>
+
+dnstypeval      = 1*digit / "A" / "NS" / "MD" /
+                  <Any IANA registered DNS type mnemonic>
+~~~
+
+The DNS resource follows {{!RFC4501}} but indicates the DNS resource MUST be accessed using TCP over TLS as described in {{!RFC7858}}.
+
+# DNS over HTTPS URI registration
+
+This section describes the URI template for the registration of the URI as described in {{!RFC8484}} to describe DNS resources being accessed using DNS over HTTPS. 
+
+~~~
+URL scheme name: "doh".
+
+URL scheme syntax: A DNS URI designates a DNS resource record set,
+referenced by domain name, class, type, and, optionally, the
+authority.  The DNS URI follows the generic syntax from {{!RFC3986}}
+and is described using ABNF {{!RFC5234}}.  Strings are not case 
+sensitive, and free insertion of linear-white-space is not permitted.
+
+dnsurl          = "doh:" [ "//" dnsauthority "/" ]
+                  dnsname ["?" dnsquery]
+
+dnsauthority    = host [ ":" port ] [ "/" abs_path ] 
+                             ; See RFC 3986 for the
+                             ; definition of "host" and "port"
+                             ; "abs_path"
+
+
+dnsname         = *pchar
+                             ; See RFC 3986 for the
+                             ; definition of "pchar".
+
+                             ; The "dnsname" field may be a
+                             ; "relative" or "absolute" name,
+                             ; as per RFC 1034, section 3.1.
+
+                             ; Note further that an empty
+                             ; "dnsname" value is to be
+                             ; interpreted as the root itself.
+                             ; See below on relative dnsnames.
+
+dnsquery        = dnsqueryelement [";" dnsquery]
+
+dnsqueryelement = ( "CLASS=" dnsclassval ) / ( "TYPE=" dnstypeval )
+                             ; Each clause MUST NOT be used more
+                             ; than once.
+
+dnsclassval     = 1*digit / "IN" / "CH" /
+                  <Any IANA registered DNS class mnemonic>
+
+dnstypeval      = 1*digit / "A" / "NS" / "MD" /
+                  <Any IANA registered DNS type mnemonic>
+~~~
+
+The DNS resource follows {{!RFC4501}} but indicates the DNS resource MUST be accessed using HTTPS as described in {{!RFC8484}}.
+
+# Acknowledgment
+
+The URI template are largly inspired from {{!RFC4501}}.
+
+
